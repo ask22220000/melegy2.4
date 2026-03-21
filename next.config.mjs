@@ -51,19 +51,18 @@ const nextConfig = {
             key: "Permissions-Policy",
             value: "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()",
           },
-          // Enhanced Content Security Policy - VERY STRICT
+          // Enhanced Content Security Policy - BALANCED Security
           {
             key: "Content-Security-Policy",
             value: [
-              "default-src 'none'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.vercel-insights.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: blob: https:",
               "media-src 'self' blob: https:",
               "connect-src 'self' https: wss:",
               "worker-src 'self' blob:",
-              "child-src 'self'",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
