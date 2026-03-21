@@ -72,7 +72,6 @@ export default function RootLayout({
       <head>
         {/* Security Meta Tags */}
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: wss:" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <meta name="format-detection" content="telephone=no, email=no, address=no" />
 
