@@ -4,14 +4,28 @@ import type { NextRequest } from 'next/server'
 export default function proxy(request: NextRequest) {
   const response = NextResponse.next()
 
-  // Security Headers
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
+  // Security Headers - Prevent Clickjacking
+  response.headers.set('X-Frame-Options', 'DENY')
+  
+  // Security Headers - Prevent MIME type sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff')
+  
+  // Referrer Policy - Prevent referrer information leakage
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  
+  // XSS Protection
   response.headers.set('X-XSS-Protection', '1; mode=block')
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(self), geolocation=(), interest-cohort=()')
+  
+  // Strict Transport Security - Enforce HTTPS
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
+  
+  // Permissions Policy - Restrict feature access
+  response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()')
+  
+  // Prevent access to sensitive information
+  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none')
 
-  // Content Security Policy
+  // Enhanced Content Security Policy - Balanced Security
   const csp = [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://vercel.live https://*.vercel.live https://checkouts.kashier.io https://www.paypal.com https://www.paypalobjects.com",
@@ -20,12 +34,14 @@ export default function proxy(request: NextRequest) {
     "img-src 'self' data: blob: https: http:",
     "media-src 'self' data: blob: https:",
     "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://va.vercel-scripts.com https://vercel.live wss: https://fal.run https://*.fal.run https://*.fal.ai",
+    "frame-ancestors 'none'",
     "frame-src 'self' https://www.paypal.com https://checkouts.kashier.io https://vercel.live https://*.vercel.live",
     "worker-src 'self' blob:",
     "child-src 'self' blob:",
     "form-action 'self' https://checkouts.kashier.io",
     "base-uri 'self'",
     "manifest-src 'self'",
+    "upgrade-insecure-requests",
   ].join('; ')
 
   response.headers.set('Content-Security-Policy', csp)
