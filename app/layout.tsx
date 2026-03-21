@@ -60,6 +60,7 @@ export const metadata: Metadata = {
     email: false,
     address: false,
   },
+}
 
 export default function RootLayout({
   children,
