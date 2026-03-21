@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseKey) {
-      console.error("[v0] Missing Supabase environment variables")
       return NextResponse.json({ error: "خطأ في إعداد السيرفر" }, { status: 500 })
     }
 
