@@ -2,9 +2,6 @@ import { createClient } from "@supabase/supabase-js"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-
 // Auto-migrate: add mlg_user_id + updated_at columns if they don't exist yet
 async function ensureColumns(supabase: ReturnType<typeof createClient>) {
   try {
@@ -18,14 +15,19 @@ async function ensureColumns(supabase: ReturnType<typeof createClient>) {
 // GET /api/save-chat?user_id=mlg_xxx — load all saved chats for the calling user
 export async function GET(request: NextRequest) {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({ histories: [], _error: "Missing Supabase config" })
+    }
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
     const { searchParams } = new URL(request.url)
     const mlgUserId = searchParams.get("user_id")
 
     if (!mlgUserId) {
       return NextResponse.json({ histories: [] })
     }
-
-    const supabase = createClient(supabaseUrl, supabaseKey)
 
     // Try fetching by mlg_user_id first
     const { data, error } = await supabase
@@ -59,6 +61,11 @@ export async function GET(request: NextRequest) {
 // POST /api/save-chat — save a full conversation linked to mlg_user_id
 export async function POST(request: Request) {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json({ error: "Missing Supabase config" }, { status: 500 })
+    }
     const supabase = createClient(supabaseUrl, supabaseKey)
     const { chat_title, chat_date, messages, mlg_user_id } = await request.json()
 
