@@ -53,7 +53,13 @@ export const metadata: Metadata = {
     description: "مساعد ذكاء اصطناعي متطور يوفر لك إجابات دقيقة، بحث متقدم، وتوليد محتوى إبداعي",
     images: ["/icons/icon-512x512.png"],
   },
-}
+  // Security Meta Tags
+  referrer: "strict-origin-when-cross-origin",
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
 
 export default function RootLayout({
   children,
@@ -63,6 +69,12 @@ export default function RootLayout({
   return (
     <html lang="ar" className="dark" suppressHydrationWarning>
       <head>
+        {/* Security Meta Tags */}
+        <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https: wss:" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <meta name="format-detection" content="telephone=no, email=no, address=no" />
+
         {/* PWA Core */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />

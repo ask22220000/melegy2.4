@@ -18,6 +18,7 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -25,3 +26,28 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Security - NEVER commit these
+.env.local
+.env.production.local
+.env.test.local
+.env.development.local
+
+# Source maps (should be disabled in production)
+*.map
+.next/static/**/*.map
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+logs/
+*.log
