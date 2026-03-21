@@ -6,7 +6,10 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "security-audit": "node scripts/security-audit.js",
+    "security-check": "npm run security-audit && npm run build",
+    "pre-deploy": "npm run lint && npm run security-audit && npm run build"
   },
   "dependencies": {
     "@ai-sdk/react": "^3.0.0",
