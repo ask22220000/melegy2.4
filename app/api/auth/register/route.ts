@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseKey) {
-      console.error("[v0] Missing Supabase environment variables")
       return NextResponse.json({ error: "خطأ في إعداد السيرفر" }, { status: 500 })
     }
 
@@ -23,7 +22,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "البريد الإلكتروني وكلمة المرور مطلوبة" }, { status: 400 })
     }
 
-    // Check if user already exists
     const { data: existingUser } = await supabase
       .from("melegy_users")
       .select("id")
@@ -34,10 +32,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "هذا البريد الإلكتروني مسجل بالفعل" }, { status: 400 })
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Create user
     const { data: newUser, error } = await supabase
       .from("melegy_users")
       .insert({
@@ -50,11 +46,9 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (error || !newUser) {
-      console.error("[v0] Registration error:", error)
       return NextResponse.json({ error: "فشل إنشاء الحساب" }, { status: 500 })
     }
 
-    // Create JWT token
     const token = jwt.sign({ userId: newUser.id, email: newUser.email }, JWT_SECRET, { expiresIn: "30d" })
 
     return NextResponse.json({
@@ -63,8 +57,7 @@ export async function POST(req: NextRequest) {
       email: newUser.email,
       plan: newUser.plan,
     })
-  } catch (err) {
-    console.error("[v0] Register endpoint error:", err)
+  } catch {
     return NextResponse.json({ error: "حدث خطأ في السيرفر" }, { status: 500 })
   }
 }

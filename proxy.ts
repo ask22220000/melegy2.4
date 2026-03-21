@@ -1,31 +1,17 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const response = NextResponse.next()
 
-  // Security Headers - Prevent Clickjacking
   response.headers.set('X-Frame-Options', 'DENY')
-
-  // Security Headers - Prevent MIME type sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff')
-
-  // Referrer Policy - Prevent referrer information leakage
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-
-  // XSS Protection
   response.headers.set('X-XSS-Protection', '1; mode=block')
-
-  // Strict Transport Security - Enforce HTTPS
   response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
-
-  // Permissions Policy - Restrict feature access
   response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()')
-
-  // Prevent access to sensitive information
   response.headers.set('X-Permitted-Cross-Domain-Policies', 'none')
 
-  // Enhanced Content Security Policy
   const csp = [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://vercel.live https://*.vercel.live https://checkouts.kashier.io https://www.paypal.com https://www.paypalobjects.com",
