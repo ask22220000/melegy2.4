@@ -1,4 +1,4 @@
-import * as fal from "@fal-ai/serverless-client"
+import * as fal from "@fal-ai/client"
 import { NextResponse } from "next/server"
 import { processPromptForImageEditing, IMAGE_EDIT_QUALITY_CONSTANTS } from "@/lib/prompt-enhancer"
 
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       },
     })
 
-    const editedImageUrl = result.images?.[0]?.url
+    const editedImageUrl = (result as any)?.data?.images?.[0]?.url ?? (result as any)?.images?.[0]?.url
 
     if (!editedImageUrl) {
       console.error("[v0] fal.ai response:", JSON.stringify(result, null, 2))

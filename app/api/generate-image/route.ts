@@ -1,5 +1,5 @@
 import { processPromptForImageGeneration, IMAGE_GEN_QUALITY_CONSTANTS, NEGATIVE_PROMPT_CONSTANTS } from "@/lib/prompt-enhancer"
-import * as fal from "@fal-ai/serverless-client"
+import * as fal from "@fal-ai/client"
 
 export async function POST(req: Request) {
   try {
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       },
     })
 
-    const generatedImageUrl = result.images?.[0]?.url
+    const generatedImageUrl = result?.data?.images?.[0]?.url ?? result?.images?.[0]?.url
 
     if (!generatedImageUrl) {
       console.error("[v0] fal.ai response:", JSON.stringify(result, null, 2))

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import * as fal from "@fal-ai/serverless-client"
+import * as fal from "@fal-ai/client"
 import { IMAGE_EDIT_QUALITY_CONSTANTS } from "@/lib/prompt-enhancer"
 
 const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 
       console.log("[v0] 4. Editing image with fal-ai/flux-2-flex/edit...")
 
-      const result = (await fal.subscribe("fal-ai/nano-banana/edit", {
+      const result = await fal.subscribe("fal-ai/nano-banana/edit", {
         input: {
           prompt: enhancedPrompt,
           image_urls: [imageUrl],
@@ -125,9 +125,9 @@ export async function POST(request: NextRequest) {
           guidance_scale: 8.5,
           num_images: 1,
         },
-      })) as { images?: { url: string }[] }
+      })
 
-      editedImageUrl = result.images?.[0]?.url
+      editedImageUrl = (result as any)?.data?.images?.[0]?.url ?? (result as any)?.images?.[0]?.url
 
       if (!editedImageUrl) {
         throw new Error("No image returned from fal.ai")

@@ -219,8 +219,8 @@ export default function ChatPage() {
         .then((r) => r.json())
         .then((data) => {
           if (data.user) {
-            setMlgUserId(data.user.mlg_user_id)
-            setMlgPlan(data.user.plan)
+            localStorage.setItem("mlg_user_id", data.user.mlg_user_id)
+            localStorage.setItem("mlg_plan", data.user.plan)
             loadConversationsFromServer(data.user.mlg_user_id)
           } else {
             // User ID invalid - redirect to login
@@ -228,9 +228,7 @@ export default function ChatPage() {
           }
         })
         .catch(() => {
-          // On error keep stored values
-          setMlgUserId(storedId)
-          setMlgPlan(storedPlan)
+          // On error keep stored values - they're already in localStorage
           loadConversationsFromServer(storedId)
         })
     } else {

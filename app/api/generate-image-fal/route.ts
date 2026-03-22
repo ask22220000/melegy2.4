@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import * as fal from "@fal-ai/serverless-client"
+import * as fal from "@fal-ai/client"
 import { processPromptForImageGeneration, NEGATIVE_PROMPT_CONSTANTS } from "@/lib/prompt-enhancer"
 
 export const maxDuration = 60
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Extract the image URL from the result
-    const imageUrl = (result as any).images?.[0]?.url
+    const imageUrl = (result as any)?.data?.images?.[0]?.url ?? (result as any)?.images?.[0]?.url
 
     if (!imageUrl) {
       console.error("[v0] No image in result:", result)
