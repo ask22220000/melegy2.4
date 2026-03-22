@@ -1,4 +1,4 @@
-import * as fal from "@fal-ai/serverless-client"
+import * as fal from "@fal-ai/client"
 import { NextResponse } from "next/server"
 
 function enhanceArabicPrompt(prompt: string): string {
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       },
     })
 
-    const videoUrl = result.data?.video?.url
+    const videoUrl = (result as any)?.data?.video?.url ?? (result as any)?.video?.url
 
     if (!videoUrl) {
       throw new Error("No video URL in response")
