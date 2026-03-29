@@ -94,4 +94,7 @@
     "tailwindcss": "^3.4.16",
     "typescript": "^5.7.2"
   }
+  "scripts": {
+  "build": "next build"  // أو أي أمر تاني حسب الإطار اللي شغال بيه
+}
 }
